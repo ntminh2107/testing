@@ -1,6 +1,6 @@
-package dao;
+package com.example.testing.dao;
 
-import model.Category;
+import com.example.testing.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

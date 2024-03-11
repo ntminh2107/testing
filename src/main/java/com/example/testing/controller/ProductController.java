@@ -1,19 +1,18 @@
-package controller;
+package com.example.testing.controller;
 
-import dao.CategoryService;
-import dao.ProductService;
-import dao.SupplierService;
-import model.Category;
-import model.Product;
-import model.Supplier;
+import com.example.testing.dao.CategoryService;
+import com.example.testing.dao.ProductService;
+import com.example.testing.dao.SupplierService;
+import com.example.testing.model.Category;
+import com.example.testing.model.Product;
+import com.example.testing.model.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Controller
-@RequestMapping("/products")
+@RestController
+
 public class ProductController {
 
     private final ProductService productService;
@@ -52,7 +51,7 @@ public class ProductController {
         model.addAttribute("products", products);
         return "product-list";
     }
-    @GetMapping
+    @GetMapping("/option")
     public String showProductOptionsPage() {
         return "product-options"; // This should be the name of your product options page template
     }

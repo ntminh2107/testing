@@ -1,8 +1,8 @@
-package dao;
+package com.example.testing.dao;
 
-import model.Category;
-import model.Product;
-import model.Supplier;
+import com.example.testing.model.Category;
+import com.example.testing.model.Product;
+import com.example.testing.model.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
-package dao;
+package com.example.testing.dao;
 
-import model.Product;
+import com.example.testing.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
