@@ -38,6 +38,7 @@
             </tbody>
         </table>
     </div>
+    <a href="/products/option" class="btn btn-info btn-block">Go to Option</a>
 </div>
 
 <!-- Include Bootstrap JS -->
@@ -83,6 +84,7 @@
     }
 
     function deleteProduct(productId) {
+    if (confirm("Are you sure you want to delete this product?")) {
     $.ajax({
         url: '/products/delete/' + productId,
         type: 'POST',
@@ -126,7 +128,7 @@
             console.error(xhr.responseText);
         }
     });
-}
+}}
 
 
 </script>

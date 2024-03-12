@@ -11,7 +11,7 @@
 
 <div class="container">
     <h2>Add Product</h2>
-    <form th:action="@{/products/add}" th:object="${product}" method="post">
+    <form id="addForm" th:action="@{/products/add}" th:object="${product}" method="post">
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" th:field="*{name}" required>
@@ -42,10 +42,13 @@
                 <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}" required></option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="confirmAdd()">Submit</button>
     </form>
     <div class="text-right"> <!-- Aligns content to the right -->
         <a href="/products/option" class="btn btn-secondary">Return to Options</a>
+    </div>
+    <div class="text-right"> <!-- Aligns content to the right -->
+        <a href="/products/search" class="btn btn-secondary">Go to search</a>
     </div>
 </div>
 
@@ -53,6 +56,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function confirmAdd() {
+        if (confirm("Are you sure you want to add this product?")) {
+            document.getElementById("addForm").submit();
+        }
+    }
+</script>
 
 </body>
 </html>
