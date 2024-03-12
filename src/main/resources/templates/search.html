@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Products</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Search Products</h2>
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <input type="text" class="form-control" id="searchInput" placeholder="Enter product name">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary btn-block" onclick="searchProducts()">Search</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock Quantity</th>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="productTableBody">
+            <!-- Table rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script th:inline="javascript">
+    function searchProducts() {
+        var searchInput = $('#searchInput').val();
+        // Perform AJAX request to search for products
+        $.ajax({
+            url: '/products/search',
+            type: 'POST',
+            data: { query: searchInput },
+            success: function(data) {
+                // Clear previous table rows
+                $('#productTableBody').empty();
+                // Populate table with search results
+                $.each(data, function(index, product) {
+                    var row = '<tr>' +
+                        '<td>' + product.id + '</td>' +
+                        '<td>' + product.name + '</td>' +
+                        '<td>' + product.description + '</td>' +
+                        '<td>' + product.price + '</td>' +
+                        '<td>' + product.stockQuantity + '</td>' +
+                        '<td>' + product.category.name + '</td>' +
+                        '<td>' + product.supplier.name + '</td>' +
+                        '<td>' +
+                        '<a class="btn btn-primary btn-sm" href="/products/edit/' + product.id + '">Edit</a>' +
+                        '<button class="btn btn-danger btn-sm ml-1" onclick="deleteProduct(' + product.id + ')">Delete</button>' +
+                        '</td>' +
+                        '</tr>';
+                    $('#productTableBody').append(row);
+                });
+            },
+            error: function(xhr, status, error) {
+                // Display error message
+                $('#productTableBody').html('<tr><td colspan="8" class="text-danger">Error fetching products. Please try again later.</td></tr>');
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+    function deleteProduct(productId) {
+    $.ajax({
+        url: '/products/delete/' + productId,
+        type: 'POST',
+        success: function() {
+            // Get the current search query
+            var searchInput = $('#searchInput').val();
+            // Perform AJAX request to search for products again with the same query
+            $.ajax({
+                url: '/products/search',
+                type: 'POST',
+                data: { query: searchInput },
+                success: function(data) {
+                    // Clear previous table rows
+                    $('#productTableBody').empty();
+                    // Populate table with search results
+                    $.each(data, function(index, product) {
+                        var row = '<tr>' +
+                            '<td>' + product.id + '</td>' +
+                            '<td>' + product.name + '</td>' +
+                            '<td>' + product.description + '</td>' +
+                            '<td>' + product.price + '</td>' +
+                            '<td>' + product.stockQuantity + '</td>' +
+                            '<td>' + product.category.name + '</td>' +
+                            '<td>' + product.supplier.name + '</td>' +
+                            '<td>' +
+                            '<a class="btn btn-primary btn-sm" href="/products/edit/' + product.id + '">Edit</a>' +
+                            '<button class="btn btn-danger btn-sm ml-1" onclick="deleteProduct(' + product.id + ')">Delete</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $('#productTableBody').append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Display error message
+                    $('#productTableBody').html('<tr><td colspan="8" class="text-danger">Error fetching products. Please try again later.</td></tr>');
+                    console.error(xhr.responseText);
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+
+</script>
+
+</body>
+</html>

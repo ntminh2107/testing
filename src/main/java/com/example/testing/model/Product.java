@@ -1,6 +1,7 @@
 package com.example.testing.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "product")
@@ -16,9 +17,11 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    private double price;
+    @Min(value = 1, message = "Price must be greater than or equal to 1")
+    private int price;
 
     @Column(name = "stock_quantity", nullable = false)
+    @Min(value = 1, message = "Stock quantity must be greater than or equal to 1")
     private int stockQuantity;
 
     @ManyToOne
@@ -32,7 +35,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, double price, int stockQuantity, Category category, Supplier supplier) {
+    public Product(Long id, String name, String description, int price, int stockQuantity, Category category, Supplier supplier) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -66,11 +69,11 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

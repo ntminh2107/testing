@@ -22,4 +22,11 @@ public class SupplierService {
     public Supplier getSupplierById(Long id) {
         return supplierRepository.findById(id).orElse(null);
     }
+    public Supplier getSupplierByName(String name) {
+        return supplierRepository.findByName(name);
+    }
+
+    public Supplier saveSupplier(Supplier supplier) {
+        return supplierRepository.save(supplier);
+    }
 }
