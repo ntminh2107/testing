@@ -99,4 +99,11 @@ public class ProductService {
         // Check if a product with the same name, category, and supplier already exists
         return productRepository.existsByNameAndCategoryAndSupplier(product.getName(), product.getCategory(), product.getSupplier());
     }
+    public List<Product> getProductsBySupplierIdAndName(Long supplierId, String productName) {
+        return productRepository.findBySupplierIdAndNameContainingIgnoreCase(supplierId, productName);
+    }
+    public void saveProduct(Product product) {
+        // Call the save method of ProductRepository
+        productRepository.save(product);
+    }
 }

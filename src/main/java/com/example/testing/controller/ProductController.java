@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 @Controller
 @RequestMapping("/products")
 public class ProductController {
@@ -151,6 +153,41 @@ public class ProductController {
         // Redirect to a suitable endpoint after successful update
         return "redirect:/products/search-page";
     }
+
+    @GetMapping("/search-product-by-supplier")
+    public String searchProductsBySupplierAndName(@RequestParam("supplierId") Long supplierId,
+                                                  @RequestParam("productName") String productName,
+                                                  Model model) {
+        List<Product> products = productService.getProductsBySupplierIdAndName(supplierId, productName);
+        model.addAttribute("products", products);
+        return "product-search-by-supplier";
+    }
+    @PostMapping("/add-quantity")
+    public String addQuantityToProduct(@RequestParam("selectedProduct") Long productId,
+                                       @RequestParam("quantity") int quantity,
+                                       @RequestParam("supplierId") Long supplierId,
+                                       RedirectAttributes redirectAttributes) {
+        try {
+            // Retrieve the product from the database using its ID
+            Product product = productService.getProductById(productId);
+
+            // Add the specified quantity to the existing stock quantity of the product
+            product.setStockQuantity(product.getStockQuantity() + quantity);
+
+            // Save the updated product
+            productService.saveProduct(product);
+
+            // Redirect with success message
+            redirectAttributes.addFlashAttribute("successMessage", "Quantity added successfully!");
+        } catch (Exception e) {
+            // Redirect with error message if an error occurs
+            redirectAttributes.addFlashAttribute("errorMessage", "Error adding quantity: " + e.getMessage());
+        }
+
+        // Redirect back to the search results page with supplierId
+        return "redirect:/products/search-product-by-supplier?supplierId=" + supplierId+"&productName=";
+    }
+
 
 
 }

@@ -25,6 +25,9 @@ public class SupplierService {
     public Supplier getSupplierByName(String name) {
         return supplierRepository.findByName(name);
     }
+    public List<Supplier> searchSupplierByName(String name) {
+        return supplierRepository.findByNameContainingIgnoreCase(name);
+    }
 
     public Supplier saveSupplier(Supplier supplier) {
         return supplierRepository.save(supplier);
