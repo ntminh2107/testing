@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 12, 2024 at 09:15 AM
+-- Generation Time: Mar 25, 2024 at 08:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -51,7 +51,7 @@ INSERT INTO `category` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `product` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `name` varchar(100) NOT NULL,
   `description` text DEFAULT NULL,
   `price` int(10) NOT NULL,
@@ -65,13 +65,13 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `description`, `price`, `stock_quantity`, `category_id`, `supplier_id`) VALUES
-(1, 'Smartphone2', 'A high-end smartphone with advanced features', 999, 100, 1, 1),
+(1, 'Smartphone', 'A high-end smartphone with advanced features', 999, 110, 1, 1),
 (2, 'T-shirt', '100% cotton, available in various colors and sizes', 20, 100, 2, 2),
 (3, 'Java Programming Book', 'Comprehensive guide for Java developers', 50, 30, 3, 3),
-(4, 'Refrigerator', 'Energy-efficient refrigerator with frost-free technology', 900, 20, 4, 4),
+(4, 'Refrigerator', 'Energy-efficient refrigerator with frost-free technology', 900, 22, 4, 4),
 (5, 'Dining Table', 'Solid wood dining table with 6 chairs', 700, 10, 5, 5),
 (6, 'Basketball', 'Official size and weight basketball for outdoor play', 30, 50, 6, 6),
-(7, 'Smartphone2', 'A high-end smartphone with advanced features', 999, 100, 2, 1);
+(7, 'Smartphone2', 'A high-end smartphone with advanced features', 999, 115, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -99,6 +99,26 @@ INSERT INTO `supplier` (`id`, `name`, `contact_person`, `phone`, `email`) VALUES
 (5, 'FurniHome', 'Robert Garcia', '+1122334455', 'robert@furnihome.com'),
 (6, 'SportsGear Co.', 'Jessica Martinez', '+9988776655', 'jessica@sportsgear.com');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `password`) VALUES
+(5, 'root', '$2a$10$XnKmZ0b2HLGqoD/faG.6L.IIFtx2b2dT5j7awFReQsttgbZG/Mcvi'),
+(7, 'root1', '$2a$10$O1mVi2dNe4bLeaK2KXH4hedJ0nFasTUwMT5E7GHkrpu/FJRHzK1my');
+
 --
 -- Indexes for dumped tables
 --
@@ -124,6 +144,13 @@ ALTER TABLE `supplier`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -137,13 +164,19 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
