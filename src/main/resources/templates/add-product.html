@@ -15,21 +15,23 @@
     <form id="addForm" th:action="@{/products/add}" th:object="${product}" method="post">
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+            <input type="text" class="form-control" id="name" th:field="*{name}">
+            <span id="nameError" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea class="form-control" id="description" th:field="*{description}"required></textarea>
+            <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+            <span id="descriptionError" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="price">Price:</label>
-            <input type="number" class="form-control" id="price" th:field="*{price}" required>
-            <span th:if="${priceError}" th:text="${priceError}" class="text-danger"></span>
+            <input type="number" class="form-control" id="price" th:field="*{price}" pattern="[1-9]+" step="1">
+            <span id="priceError" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="stockQuantity">Stock Quantity:</label>
-            <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}" required>
-            <span th:if="${stockQuantityError}" th:text="${stockQuantityError}" class="text-danger"></span>
+            <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}" pattern="[0-9]+" step="1">
+            <span id="stockQuantityError" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="category">Category:</label>
@@ -43,13 +45,13 @@
                 <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}" required></option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary" onclick="confirmAdd()">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="validateForm()">Submit</button>
     </form>
     <div class="text-right"> <!-- Aligns content to the right -->
         <a href="/products/option" class="btn btn-secondary">Return to Options</a>
     </div>
     <div class="text-right"> <!-- Aligns content to the right -->
-        <a href="/products/search" class="btn btn-secondary">Go to search</a>
+        <a href="/products/search-page" class="btn btn-secondary">Go to search</a>
     </div>
 </div>
 
@@ -58,12 +60,55 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    function confirmAdd() {
-        if (confirm("Are you sure you want to add this product?")) {
-            document.getElementById("addForm").submit();
+    function validateForm() {
+        var name = document.getElementById("name").value;
+        var description = document.getElementById("description").value;
+        var price = document.getElementById("price").value;
+        var stockQuantity = document.getElementById("stockQuantity").value;
+
+        // Reset error messages
+        document.getElementById("nameError").innerText = "";
+        document.getElementById("descriptionError").innerText = "";
+        document.getElementById("priceError").innerText = "";
+        document.getElementById("stockQuantityError").innerText = "";
+
+        // Validation logic
+        var isValid = true;
+        if (name.trim() === "") {
+            document.getElementById("nameError").innerText = "Name is required";
+            isValid = false;
+        }
+        if (description.trim() === "") {
+            document.getElementById("descriptionError").innerText = "Description is required";
+            isValid = false;
+        }
+        if (isNaN(price) || parseInt(price) <= 0) {
+            document.getElementById("priceError").innerText = "Price must be a number greater than zero";
+            isValid = false;
+        }
+        if (isNaN(stockQuantity) || parseInt(stockQuantity) <= 0) {
+            document.getElementById("stockQuantityError").innerText = "Stock quantity must be a number greater than zero";
+            isValid = false;
+        }
+        if (!/^\d+$/.test(price)) {
+            document.getElementById("priceError").innerText = "Price must be an integer";
+            isValid = false;
+        }
+        if (!/^\d+$/.test(stockQuantity)) {
+            document.getElementById("stockQuantityError").innerText = "Stock quantity must be an integer";
+            isValid = false;
+        }
+
+        if (isValid) {
+            if (confirm("Are you sure you want to add this product?")) {
+                document.getElementById("addForm").submit();
+            }
         }
     }
 </script>
+
+
+
 
 </body>
 </html>
