@@ -91,8 +91,23 @@
     }
 
     function deleteProduct(productId) {
-        // Delete product logic here
+    if (!confirm("Are you sure you want to delete this product?")) {
+        return; // Exit if the user cancels the action
     }
+
+    // Perform AJAX request to delete the product
+    $.ajax({
+        url: 'http://localhost:8080/products/delete/' + productId,
+        type: 'POST',
+        success: function(response) {
+            alert(response); // Show success message
+            searchProducts(); // Refresh the list of products
+        },
+        error: function(xhr, status, error) {
+            alert("Error deleting product. Please try again later."); // Show error message
+        }
+    });
+}
 </script>
 
 </body>
