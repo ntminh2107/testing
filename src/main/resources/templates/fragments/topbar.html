@@ -5,15 +5,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Application Title</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles for top bar */
+        .navbar {
+            background-color: #343a40; /* Dark background color */
+        }
+        .navbar-brand {
+            color: #ffffff; /* White text color */
+        }
+        .navbar-brand:hover {
+            color: #ffffff; /* White text color on hover */
+        }
+        .navbar-nav .nav-link {
+            color: #ffffff; /* White text color */
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffffff; /* White text color on hover */
+        }
+    </style>
 </head>
 <body>
 <div th:fragment="topbar">
-<!-- Top bar for authenticated users -->
-
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Logout" />
-    </form>
-
+    <!-- Top bar for authenticated users -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/products/option">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" method="post" class="nav-link">
+                            <input type="submit" value="Logout" class="btn btn-outline-light">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </div>
 <!-- Main content here -->
 

@@ -14,4 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByNameContainingIgnoreCase(String name);
     boolean existsByNameAndCategoryAndSupplier(String name, Category category, Supplier supplier);
     List<Product> findBySupplierIdAndNameContainingIgnoreCase(Long supplierId, String productName);
+    Product findByName(String name);
 }

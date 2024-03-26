@@ -14,45 +14,43 @@
     <h2>Add Product</h2>
     <form id="addForm" th:action="@{/products/add}" th:object="${product}" method="post">
         <div class="form-group">
-            <label for="name">Name:</label>
+            <label for="name">Name: <span style="color: red;">*</span></label>
             <input type="text" class="form-control" id="name" th:field="*{name}">
             <span id="nameError" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label for="description">Description:</label>
+            <label for="description">Description: <span style="color: red;">*</span></label>
             <textarea class="form-control" id="description" th:field="*{description}"></textarea>
             <span id="descriptionError" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label for="price">Price:</label>
-            <input type="number" class="form-control" id="price" th:field="*{price}" pattern="[1-9]+" step="1">
+            <label for="price">Price: <span style="color: red;">*</span></label>
+            <input type="number" class="form-control" id="price" th:field="*{price}">
             <span id="priceError" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label for="stockQuantity">Stock Quantity:</label>
-            <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}" pattern="[0-9]+" step="1">
+            <label for="stockQuantity">Stock Quantity: <span style="color: red;">*</span></label>
+            <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}">
             <span id="stockQuantityError" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label for="category">Category:</label>
             <select class="form-control" id="category" th:field="*{category.id}">
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" required></option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
             </select>
         </div>
         <div class="form-group">
             <label for="supplier">Supplier:</label>
             <select class="form-control" id="supplier" th:field="*{supplier.id}">
-                <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}" required></option>
+                <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
             </select>
         </div>
         <button type="button" class="btn btn-primary" onclick="validateForm()">Submit</button>
     </form>
     <div class="text-right"> <!-- Aligns content to the right -->
-        <a href="/products/option" class="btn btn-secondary">Return to Options</a>
+        <a href="/products/option" class="btn btn-secondary">Return to Home</a>
     </div>
-    <div class="text-right"> <!-- Aligns content to the right -->
-        <a href="/products/search-page" class="btn btn-secondary">Go to search</a>
-    </div>
+
 </div>
 
 <!-- Include Bootstrap JS -->
@@ -82,19 +80,21 @@
             document.getElementById("descriptionError").innerText = "Description is required";
             isValid = false;
         }
-        if (isNaN(price) || parseInt(price) <= 0) {
+
+
+        if (parseInt(price) <= 0) {
             document.getElementById("priceError").innerText = "Price must be a number greater than zero";
             isValid = false;
         }
-        if (isNaN(stockQuantity) || parseInt(stockQuantity) <= 0) {
+        if (parseInt(stockQuantity) <= 0) {
             document.getElementById("stockQuantityError").innerText = "Stock quantity must be a number greater than zero";
             isValid = false;
         }
-        if (!/^\d+$/.test(price)) {
+        if (!/^-?\d+$/.test(price)) {
             document.getElementById("priceError").innerText = "Price must be an integer";
             isValid = false;
         }
-        if (!/^\d+$/.test(stockQuantity)) {
+        if (!/^-?\d+$/.test(stockQuantity)) {
             document.getElementById("stockQuantityError").innerText = "Stock quantity must be an integer";
             isValid = false;
         }
@@ -105,6 +105,8 @@
             }
         }
     }
+
+
 </script>
 
 

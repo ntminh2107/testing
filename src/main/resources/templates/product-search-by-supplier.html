@@ -12,13 +12,20 @@
 <div class="container">
     <h2>Search Products</h2>
     <form th:action="@{/products/search-product-by-supplier}" method="get">
+        <label for="productName">Product Name:</label>
+        <div class="row">
+        <div class="col-md-8">
         <div class="form-group">
-            <label for="productName">Product Name:</label>
             <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name">
         </div>
+        </div>
+        <div class="col-md-4">
         <!-- Extract supplierId from URL parameter and set it as a hidden input field -->
         <input type="hidden" name="supplierId" th:value="${param.supplierId}" />
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" class="btn btn-primary btn-block">Search</button>
+        </div>
+        </div>
+
     </form>
 
     <h2>Search Results</h2>
@@ -62,7 +69,9 @@
             </div>
             <button type="button" class="btn btn-primary" id="addQuantityBtn">Add</button>
             <!-- Return button -->
-            <button type="button" class="btn btn-secondary" id="returnBtn">Return</button>
+            <div class="text-right"> <!-- Aligns content to the right -->
+                <a href="/suppliers/search-page" class="btn btn-secondary">Return</a>
+            </div>
         </form>
     </div>
 </div>

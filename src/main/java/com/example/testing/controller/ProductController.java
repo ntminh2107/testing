@@ -115,12 +115,24 @@ public class ProductController {
         // Retrieve existing product from the database
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
+
+        // Check if the edited product name already exists
+        Product existingProductWithName = productRepository.findByName(product.getName());
+        if (existingProductWithName != null && !existingProductWithName.getId().equals(productId)) {
+            // If a product with the same name exists and it's not the current product being edited
+            // Add an error message to the binding result
+            bindingResult.rejectValue("name", "duplicate", "Product name already exists");
+        }
+
         if (bindingResult.hasErrors()) {
             // Validation errors occurred, return to the edit form with error messages
             model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("suppliers", supplierRepository.findAll());
             return "edit-product";
         }
+
+        // Continue updating the product if no validation errors occurred
+
         // Update existing product properties
         existingProduct.setName(product.getName());
         existingProduct.setDescription(product.getDescription());
@@ -153,6 +165,7 @@ public class ProductController {
         // Redirect to a suitable endpoint after successful update
         return "redirect:/products/search-page";
     }
+
 
     @GetMapping("/search-product-by-supplier")
     public String searchProductsBySupplierAndName(@RequestParam("supplierId") Long supplierId,

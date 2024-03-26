@@ -17,11 +17,11 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    @Min(value = 1, message = "Price must be greater than or equal to 1")
+
     private int price;
 
     @Column(name = "stock_quantity", nullable = false)
-    @Min(value = 1, message = "Stock quantity must be greater than or equal to 1")
+
     private int stockQuantity;
 
     @ManyToOne

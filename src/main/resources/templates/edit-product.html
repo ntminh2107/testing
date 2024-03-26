@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,67 +7,58 @@
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-
 <body>
 <div th:insert="fragments/topbar :: topbar"></div>
 
 <div class="container">
     <h2>Edit Product</h2>
-
-    <form id="editForm" th:action="@{'/products/edit/' + ${product.id}}" th:object="${product}" method="post">
-        <input type="hidden" th:name="_method" th:value="PUT" />
-        <input type="hidden" th:field="*{id}" />
+    <form id="editForm" th:action="@{'/products/edit/' + ${product.id}}" th:object="${product}" method="post" onsubmit="return validateForm()">
+        <input type="hidden" th:name="_method" th:value="PUT"/>
+        <input type="hidden" th:field="*{id}"/>
 
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" th:field="*{name}">
+            <span id="nameError" class="text-danger"></span>
         </div>
+
         <div class="form-group">
             <label for="description">Description:</label>
             <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+            <span id="descriptionError" class="text-danger"></span>
         </div>
+
         <div class="form-group">
             <label for="price">Price:</label>
             <input type="number" class="form-control" id="price" th:field="*{price}">
-            <div th:if="${#fields.hasErrors('price')}" class="alert alert-danger" role="alert">
-                <span th:errors="*{price}"></span>
-            </div>
+            <span id="priceError" class="text-danger"></span>
         </div>
+
         <div class="form-group">
             <label for="stockQuantity">Stock Quantity:</label>
             <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}">
-            <div th:if="${#fields.hasErrors('stockQuantity')}" class="alert alert-danger" role="alert">
-                <span th:errors="*{stockQuantity}"></span>
-            </div>
+            <span id="stockQuantityError" class="text-danger"></span>
         </div>
+
         <div class="form-group">
             <label for="category">Category:</label>
-            <select class="form-control" id="category" name="category">
-                <option th:each="category : ${categories}"
-                        th:value="${category.id}"
-                        th:selected="${category.id == product.category.id}">
-                    <span th:text="${category.name}"></span>
-                </option>
+            <select class="form-control" id="category" th:field="*{category.id}">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
             </select>
         </div>
 
-        <!-- Supplier dropdown -->
         <div class="form-group">
             <label for="supplier">Supplier:</label>
-            <select class="form-control" id="supplier" name="supplier">
-                <option th:each="supplier : ${suppliers}"
-                        th:value="${supplier.id}"
-                        th:selected="${supplier.id == product.supplier.id}">
-                    <span th:text="${supplier.name}"></span>
-                </option>
+            <select class="form-control" id="supplier" th:field="*{supplier.id}">
+                <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
             </select>
         </div>
-        <div th:if="${error}" class="alert alert-danger" role="alert">
-            <span th:text="${error}"></span>
-        </div>
-        <button type="submit" class="btn btn-primary" onclick="confirmEdit()">Update</button>
+
+        <button type="submit" class="btn btn-primary">Update</button>
     </form>
-    <a href="/products/option" class="btn btn-info btn-block">Return to Option</a>
+    <div class="text-right">
+        <a href="/products/option" class="btn btn-secondary">Return to Home</a>
+    </div>
 </div>
 
 <!-- Include Bootstrap JS -->
@@ -76,12 +66,49 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    function confirmEdit() {
-        if (confirm("Are you sure you want to edit this product?")) {
-            document.getElementById("editForm").submit();
-        }
-    }
-</script>
-</body>
+    function validateForm() {
+    var isValid = true;
+    var name = document.getElementById("name").value;
+    var description = document.getElementById("description").value;
+    var price = document.getElementById("price").value;
+    var stockQuantity = document.getElementById("stockQuantity").value;
 
+    // Reset error messages
+    document.getElementById("nameError").innerText = "";
+    document.getElementById("descriptionError").innerText = "";
+    document.getElementById("priceError").innerText = "";
+    document.getElementById("stockQuantityError").innerText = "";
+
+    // Validation logic
+    if (name.trim() === "") {
+        document.getElementById("nameError").innerText = "Name is required";
+        isValid = false;
+    }
+    if (description.trim() === "") {
+        document.getElementById("descriptionError").innerText = "Description is required";
+        isValid = false;
+    }
+    // Check if price is a number and greater than 0
+    if (Number(price) <= 0) {
+        document.getElementById("priceError").innerText = "Price must be a number greater than zero";
+        isValid = false;
+    } else if (!/^-?\d+$/.test(price)) { // Then check if it's an integer
+        document.getElementById("priceError").innerText = "Price must be an integer";
+        isValid = false;
+    }
+    // Check if stockQuantity is a number and greater than 0
+    if (Number(stockQuantity) <= 0) {
+        document.getElementById("stockQuantityError").innerText = "Stock quantity must be a number greater than zero";
+        isValid = false;
+    } else if (!/^-?\d+$/.test(stockQuantity)) { // Then check if it's an integer
+        document.getElementById("stockQuantityError").innerText = "Stock quantity must be an integer";
+        isValid = false;
+    }
+
+    return isValid; // This will prevent the form from submitting if there are any validation errors.
+}
+
+</script>
+
+</body>
 </html>

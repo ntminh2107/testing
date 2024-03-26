@@ -11,20 +11,22 @@
 <div th:insert="/fragments/topbar :: topbar"></div>
 <div class="container">
     <h2>Search Suppliers</h2>
+
     <form th:action="@{/suppliers/search}" method="get">
         <div class="form-group">
             <label for="searchInput">Search by Name:</label>
-            <input type="text" class="form-control" id="searchInput" name="name" placeholder="Enter supplier name">
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <input type="text" class="form-control" id="searchInput" name="name" placeholder="Enter supplier name">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
     </form>
 
-    <h2>Search Results</h2>
-    <div th:if="${suppliers != null and suppliers.empty}" class="alert alert-info" role="alert">
-        No suppliers found.
-    </div>
 
-    <div th:if="${suppliers != null and not suppliers.empty}">
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -36,7 +38,9 @@
                 <th>Action</th>
             </tr>
             </thead>
-            <tbody>
+            <div th:if="${suppliers != null}">
+
+            <tbody th:if="${not #lists.isEmpty(suppliers)}">
             <tr th:each="supplier : ${suppliers}">
                 <td th:text="${supplier.id}"></td>
                 <td th:text="${supplier.name}"></td>
@@ -48,11 +52,18 @@
                 </td>
             </tr>
             </tbody>
+            <tbody th:if="${#lists.isEmpty(suppliers)}">
+            <!-- Empty table row -->
+            <tr>
+                <td colspan="6" class="text-center">No suppliers found.</td>
+            </tr>
+            </tbody>
+            </div>
         </table>
 
-    </div>
+
     <div class="text-right"> <!-- Aligns content to the right -->
-        <a href="/products/option" class="btn btn-secondary">Return to Options</a>
+        <a href="/products/option" class="btn btn-secondary">Return to Home</a>
     </div>
 </div>
 
